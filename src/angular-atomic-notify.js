@@ -81,11 +81,11 @@ angular
 
         exports.dismissAll = function () {
             directive.dismissAll();
-        }
+        };
 
         exports.dismissLatest = function () {
             directive.dismissLatest();
-        }
+        };
 
         return exports;
 
@@ -131,7 +131,7 @@ angular
             $scope.dismissLatest = function () {
                 $timeout.cancel(timer);
                 $scope.items.splice($scope.items.length - 1, 1);
-            }
+            };
         };
 
         return {
