@@ -79,11 +79,19 @@ angular
             }, delay);
         };
 
+        exports.dismissAll = function () {
+            directive.dismissAll();
+        }
+
+        exports.dismissLatest = function () {
+            directive.dismissLatest();
+        }
+
         return exports;
 
     }])
     .directive('ngAtomicNotify', function($compile, $timeout){
-
+        var timer;
         var link = function($scope, element, attr){
             var template = '<div class="atomic-notify"><div class="atomic-notify-item" ng-repeat="item in items" ng-class="discoverClass(item)"><div class="icon" ng-if="item.icon"><i ng-class="item.icon"></i></div><div class="body"><p>{{item.text}}</p></div><button type="button" class="close" ng-click="dismiss(item)">&times;</button></div></div>';
             if(angular.isString(attr.customTemplate)){
@@ -100,7 +108,7 @@ angular
             $scope.addItem = function(options, delay){
                 $scope.items.push(options);
                 if(delay > 0){
-                    $timeout(function(){
+                    timer = $timeout(function(){
                         $scope.dismiss(options);
                     }, delay);
                 }
@@ -114,6 +122,16 @@ angular
             $scope.discoverClass = function(item){
                 return 'atomic-notify-' + item.type;
             };
+
+            $scope.dismissAll = function () {
+                $timeout.cancel(timer);
+                $scope.items = [];
+            };
+
+            $scope.dismissLatest = function () {
+                $timeout.cancel(timer);
+                $scope.items.splice($scope.items.length - 1, 1);
+            }
         };
 
         return {
